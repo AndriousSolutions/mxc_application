@@ -114,4 +114,8 @@
 
 ## 1.2.0
  2019-03-18: 
-- Add named parameter loadingScreen  
+- Add named parameter loadingScreen 
+
+## 1.2.0+1
+ 2019-03-18: 
+- Updated repository in pubspec.yaml  

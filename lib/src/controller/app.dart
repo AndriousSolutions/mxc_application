@@ -135,7 +135,9 @@ class App extends AppMVC {
     return FutureBuilder<bool>(
       future: init(),
       builder: (_, snapshot) {
-        return snapshot.hasData ? _AppWidget() : loadingScreen ?? LoadingScreen();
+        return snapshot.hasData
+            ? _AppWidget()
+            : loadingScreen ?? LoadingScreen();
       },
     );
   }
