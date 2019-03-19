@@ -26,10 +26,12 @@ import 'package:flutter/foundation.dart' show Key, mustCallSuper, required;
 
 import 'package:flutter/material.dart'
     show
+        AsyncSnapshot,
         AppLifecycleState,
         BuildContext,
         Color,
         ColorSwatch,
+        ConnectionState,
         Drawer,
         DrawerHeader,
         FutureBuilder,
@@ -126,6 +128,8 @@ class App extends AppMVC {
     _vw = view;
   }
   static AppView _vw;
+  static AsyncSnapshot get snapshot => _snapshot;
+  static AsyncSnapshot _snapshot;
   final Widget loadingScreen;
 
   @override
@@ -135,8 +139,8 @@ class App extends AppMVC {
     return FutureBuilder<bool>(
       future: init(),
       builder: (_, snapshot) {
-        return snapshot.hasData
-            ? _AppWidget()
+        return snapshot.connectionState == ConnectionState.done
+            ? _AppWidget(snapshot)
             : loadingScreen ?? LoadingScreen();
       },
     );
@@ -356,7 +360,10 @@ class App extends AppMVC {
 }
 
 class _AppWidget extends StatefulWidget {
-  _AppWidget({Key key}) : super(key: key);
+  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key) {
+    /// Supply the AsyncSnapshot
+    App._snapshot = snapshot;
+  }
   State createState() => App._vw;
 }
 

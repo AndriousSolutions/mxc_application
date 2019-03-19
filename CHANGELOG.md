@@ -118,4 +118,8 @@
 
 ## 1.2.0+1
  2019-03-18: 
-- Updated repository in pubspec.yaml  
+-   Updated homepage & repository in pubspec.yaml
+
+## 1.2.1
+ 2019-03-19:
+- Supply the AsyncSnapshot in App.snapshot

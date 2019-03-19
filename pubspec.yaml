@@ -1,8 +1,8 @@
 name: mxc_application
 description: Application Framework in the MVC Design Pattern using plugins and packages prior to the AndroidX migration.
-version: 1.2.0+1
+version: 1.2.1
 author: Greg Perry <support@andrioussolutions.com>
-homepage: https://pub.dartlang.org/packages/mxc_application
+homepage: https://github.com/AndriousSolutions/mxc_application
 repository: https://github.com/AndriousSolutions/mxc_application
 
 environment:
