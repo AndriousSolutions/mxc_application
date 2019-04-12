@@ -33,7 +33,7 @@ import '../../view.dart' show Item;
 
 class ContactsService extends DBInterface {
   factory ContactsService() {
-    if (_this == null) _this = ContactsService._();
+    _this ??= ContactsService._();
     return _this;
   }
 

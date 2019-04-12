@@ -117,7 +117,7 @@ class App extends AppMVC {
   factory App(AppView view,
       {ControllerMVC con, Key key, Widget loadingScreen}) {
     // Supply a 'Controller' if need be.
-    if (_this == null) _this = App._(view, con, key, loadingScreen);
+    _this ??= App._(view, con, key, loadingScreen);
     return _this;
   }
   // Make only one instance of this class.

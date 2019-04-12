@@ -25,7 +25,7 @@ class PostalAddress {
   PostalAddress({
     this.label,
   }) {
-    if (label == null) label = "";
+    label ??= "";
   }
 
   PostalAddress.fromMap(Map m) {
