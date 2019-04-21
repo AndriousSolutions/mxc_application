@@ -12,6 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
+  mvc_pattern: #^3.2.3
+  #    path: ../../packages/mvc_pattern
+
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
   connectivity: ^0.3.0
 
@@ -36,10 +40,7 @@ dependencies:
   # https://pub.dartlang.org/packages/uuid#-changelog-tab-
   uuid: ^2.0.0
 
-  # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
-  mvc_pattern: ^3.2.3
-
- # https://pub.dartlang.org/packages/prefs#-changelog-tab-
+  # https://pub.dartlang.org/packages/prefs#-changelog-tab-
   prefs: ^1.0.0
 
   # https://pub.dartlang.org/packages/xml#-changelog-tab-

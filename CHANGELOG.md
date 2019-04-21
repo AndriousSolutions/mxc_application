@@ -1,3 +1,7 @@
+## 2.0.0
+ 2019-04-21
+- Allow for Hot Reload!  State createState() => App.createVW();
+
 ## 1.3.0
  2019-04-12:
 - _this ??=  implemented in many factory constructors.

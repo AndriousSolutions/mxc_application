@@ -47,18 +47,18 @@ import 'package:flutter/material.dart'
 
 import 'app.dart' show App;
 
-import 'view.dart' show AppController, AppView;
+import 'view.dart' show AppController, AppView, CreateView;
 
 /// Passed to runApp() but calls App()
 class MVC extends StatelessWidget {
   MVC(
-    this.view, {
+    this.createVW, {
     this.key,
   }) : super();
-  final AppView view;
+  final CreateView createVW;
   final Key key;
 
-  Widget build(BuildContext context) => App(view, key: key);
+  Widget build(BuildContext context) => App(createVW, key: key);
 }
 
 /// The Model for a simple app.

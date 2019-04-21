@@ -112,25 +112,33 @@ import 'package:mxc_application/src/view/utils/loading_screen.dart'
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
 
+typedef CreateView = AppView Function();
+
 class App extends AppMVC {
   // You must supply a 'View.'
-  factory App(AppView view,
+  factory App(CreateView createVW,
       {ControllerMVC con, Key key, Widget loadingScreen}) {
     // Supply a 'Controller' if need be.
-    _this ??= App._(view, con, key, loadingScreen);
+    _this ??= App._(createVW, con, key, loadingScreen);
     return _this;
   }
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppView view, ControllerMVC con, Key key, this.loadingScreen)
+  App._(CreateView createVW, ControllerMVC con, Key key, this.loadingScreen)
       : super(con: con, key: key) {
-    _vw = view;
+    _vw = createVW();
+    App.createVW = () {
+      if (hotLoad) _vw = createVW();
+      return _vw;
+    };
   }
   static AppView _vw;
   static AsyncSnapshot get snapshot => _snapshot;
   static AsyncSnapshot _snapshot;
   final Widget loadingScreen;
+  static CreateView createVW;
+  static bool hotLoad = false;
 
   @override
   Widget build(BuildContext context) {
@@ -138,9 +146,11 @@ class App extends AppMVC {
     App._context = context;
     return FutureBuilder<bool>(
       future: init(),
+      initialData: false,
       builder: (_, snapshot) {
+        //TODO if false, display the appropriate message.
         return snapshot.connectionState == ConnectionState.done
-            ? _AppWidget(snapshot)
+            ? snapshot.data ? _AppWidget(snapshot) : LoadingScreen()
             : loadingScreen ?? LoadingScreen();
       },
     );
@@ -364,7 +374,7 @@ class _AppWidget extends StatefulWidget {
     /// Supply the AsyncSnapshot
     App._snapshot = snapshot;
   }
-  State createState() => App._vw;
+  State createState() => App.createVW();
 }
 
 class AppView extends AppViewState<_AppWidget> {
@@ -477,6 +487,14 @@ class AppView extends AppViewState<_AppWidget> {
     super.dispose();
   }
 
+  /// During development, if a hot reload occurs, the reassemble method is called.
+  @mustCallSuper
+  @override
+  void reassemble() {
+    super.reassemble();
+    App.hotLoad = true;
+  }
+
   GlobalKey<NavigatorState> onNavigatorKey() =>
       null; //GlobalKey<NavigatorState>();
   Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
@@ -572,6 +590,9 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   final bool debugPaintLayerBordersEnabled;
   final bool debugRepaintRainbowEnabled;
 
+  /// Provide 'the view'
+  Widget build(BuildContext context);
+
   @mustCallSuper
   Future<bool> init() async {
     bool init = await con.init();
@@ -585,8 +606,15 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
     super.dispose();
   }
 
-  /// Provide 'the view'
-  Widget build(BuildContext context);
+  /// During development, if a hot reload occurs, the reassemble method is called.
+  /// This provides an opportunity to reinitialize any data that was prepared
+  /// in the initState method.
+  @mustCallSuper
+  @override
+  void reassemble() {
+    super.reassemble();
+    dispose();
+  }
 }
 
 class AppController extends ControllerMVC implements AppConMVC {

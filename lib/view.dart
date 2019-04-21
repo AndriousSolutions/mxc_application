@@ -42,4 +42,4 @@ export 'package:mxc_application/src/view/uxutils/view.dart';
 
 /// App
 export 'package:mxc_application/src/controller/app.dart'
-    show AppController, AppView;
+    show AppController, AppView, CreateView;
