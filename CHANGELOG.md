@@ -1,3 +1,7 @@
+## 2.0.1
+ 2019-04-22
+- Variable, hotLoad, to control Hot Reload!
+
 ## 2.0.0
  2019-04-21
 - Allow for Hot Reload!  State createState() => App.createVW();

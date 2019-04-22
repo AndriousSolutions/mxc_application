@@ -164,9 +164,23 @@ class App extends AppMVC {
 
   @override
   Future<bool> init() async {
+    if(!hotLoad){
+       await _initInternal();
+       _packageInfo = await PackageInfo.fromPlatform(); 
+    }
     _isInit = await super.init();
     if (_isInit) _isInit = await _vw.init();
     return _isInit;
+  }
+
+  @mustCallSuper
+  void dispose() {
+    _context = null;
+    _theme = null;
+    _scaffold = null;
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription = null;
+    super.dispose();
   }
 
   /// Determine if the App initialized successfully.
@@ -293,12 +307,6 @@ class App extends AppMVC {
   static final Connectivity _connectivity = Connectivity();
 
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
-  @mustCallSuper
-  static void _dispose() {
-    _connectivitySubscription.cancel();
-    _connectivitySubscription = null;
-  }
 
   static get filesDir => _path;
   static String _path;
@@ -470,29 +478,12 @@ class AppView extends AppViewState<_AppWidget> {
     );
   }
 
-  @mustCallSuper
-  Future<bool> init() async {
-    await App._initInternal();
-    App._packageInfo = await PackageInfo.fromPlatform();
-    bool init = await super.init();
-    return init;
-  }
-
-  // Called in the _App dispose() function.
-  void dispose() {
-    App._dispose();
-    App._context = null;
-    App._theme = null;
-    App._scaffold = null;
-    super.dispose();
-  }
-
   /// During development, if a hot reload occurs, the reassemble method is called.
   @mustCallSuper
   @override
   void reassemble() {
-    super.reassemble();
     App.hotLoad = true;
+    super.reassemble();
   }
 
   GlobalKey<NavigatorState> onNavigatorKey() =>
