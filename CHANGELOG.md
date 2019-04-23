@@ -1,3 +1,7 @@
+## 2.0.2
+ 2019-04-22
+- Take in the latest package version of Prefs:
+
 ## 2.0.1
  2019-04-22
 - Variable, hotLoad, to control Hot Reload!

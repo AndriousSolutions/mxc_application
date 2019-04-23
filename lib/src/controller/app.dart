@@ -164,9 +164,9 @@ class App extends AppMVC {
 
   @override
   Future<bool> init() async {
-    if(!hotLoad){
-       await _initInternal();
-       _packageInfo = await PackageInfo.fromPlatform(); 
+    if (!hotLoad) {
+      await _initInternal();
+      _packageInfo = await PackageInfo.fromPlatform();
     }
     _isInit = await super.init();
     if (_isInit) _isInit = await _vw.init();
