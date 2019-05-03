@@ -487,11 +487,14 @@ class _DBInterface {
     return opened;
   }
 
-  Future<void> close() async {
-    if (db != null) {
-      await db.close();
-      db = null;
-    }
+  void close() {
+    var temp = db;
+
+    /// Hot reload must have db close & set to null first.
+    db = null;
+
+    /// Don't provide the 'await' command as the process MUST wait.
+    temp?.close();
   }
 
   int rowsUpdated;
