@@ -149,8 +149,9 @@ class App extends AppMVC {
       initialData: false,
       builder: (_, snapshot) {
         //TODO if false, display the appropriate message.
+        if(snapshot.hasError) return Text("${snapshot.error}");
         return snapshot.connectionState == ConnectionState.done
-            ? (snapshot.hasData ? _AppWidget(snapshot) : LoadingScreen())
+            ? (snapshot.hasData && snapshot.data ? _AppWidget(snapshot) : LoadingScreen())
             : loadingScreen ?? LoadingScreen();
       },
     );
