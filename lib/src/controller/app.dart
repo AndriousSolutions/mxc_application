@@ -150,7 +150,7 @@ class App extends AppMVC {
       builder: (_, snapshot) {
         //TODO if false, display the appropriate message.
         return snapshot.connectionState == ConnectionState.done
-            ? snapshot.data ? _AppWidget(snapshot) : LoadingScreen()
+            ? (snapshot.hasData ? _AppWidget(snapshot) : LoadingScreen())
             : loadingScreen ?? LoadingScreen();
       },
     );
