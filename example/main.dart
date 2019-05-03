@@ -7,4 +7,4 @@ import 'package:mxc_application/mvc.dart' show MVC;
 
 import 'view.dart' show ContactsExampleApp;
 
-void main() => runApp(MVC(ContactsExampleApp()));
+void main() => runApp(MVC(()=>ContactsExampleApp()));
