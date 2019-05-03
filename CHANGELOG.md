@@ -1,3 +1,8 @@
+## 2.0.3
+ 2019-05-03
+- snapshot.hasData ? _AppWidget(snapshot) : LoadingScreen()
+- Hot reload must have db close & set to null first.
+
 ## 2.0.2
  2019-04-22
 - Take in the latest package version of Prefs:
