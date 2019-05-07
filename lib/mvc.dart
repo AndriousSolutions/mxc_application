@@ -30,8 +30,11 @@ import 'package:flutter/material.dart'
     show
         BuildContext,
         Key,
+        State,
+        StatefulWidget,
         StatelessWidget,
         Widget,
+        Center,
         Color,
         GenerateAppTitle,
         GlobalKey,
@@ -41,24 +44,50 @@ import 'package:flutter/material.dart'
         NavigatorObserver,
         NavigatorState,
         RouteFactory,
+        Scaffold,
+        Text,
         ThemeData,
         TransitionBuilder,
         WidgetBuilder;
 
 import 'app.dart' show App;
 
-import 'view.dart' show AppController, AppView, CreateView;
+import 'view.dart' show AppController, AppView, showBox;
+
+import 'controller.dart' show ControllerMVC;
+
+typedef CreateView = AppView Function();
+CreateView _createVW;
 
 /// Passed to runApp() but calls App()
+/// Not longer effective alternative.
+@deprecated
 class MVC extends StatelessWidget {
   MVC(
-    this.createVW, {
+    CreateView createVW, {
     this.key,
-  }) : super();
-  final CreateView createVW;
+    this.con,
+    this.loadingScreen,
+  }) : super() {
+    _createVW = createVW;
+  }
   final Key key;
+  final ControllerMVC con;
+  final Widget loadingScreen;
 
-  Widget build(BuildContext context) => App(createVW, key: key);
+  Widget build(BuildContext context) => _MyApp(
+        key: key,
+        con: con,
+        loadingScreen: loadingScreen,
+      );
+}
+
+class _MyApp extends App {
+  _MyApp({Key key, ControllerMVC con, Widget loadingScreen})
+      : super(key: key, con: con, loadingScreen: loadingScreen);
+
+  @override
+  AppView createView() => _createVW();
 }
 
 /// The Model for a simple app.
@@ -70,6 +99,27 @@ class ModelMVC {
 
   /// Allow for easy access to 'the first Model' throughout the application.
   static ModelMVC get mod => _firstMod ?? ModelMVC();
+}
+
+class AppError extends ViewMVC {
+  AppError(Object exception, {Key key})
+      : super(home: _AppError(exception, key: key));
+}
+
+class _AppError extends StatefulWidget {
+  _AppError(this.exception, {Key key}) : super(key: key);
+  final Object exception;
+  @override
+  State<StatefulWidget> createState() => _AppErrorState();
+}
+
+class _AppErrorState extends State<_AppError> {
+
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Text("${widget.exception.toString()}"),
+        ),
+      );
 }
 
 /// Passed as 'View' to MVC class for a simple app.

@@ -23,6 +23,7 @@
 
 import 'package:flutter/material.dart';
 
+
 Future<bool> showBox({
   @required BuildContext context,
   String text,
@@ -76,8 +77,7 @@ void dialogBox({
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext context) {
-        return _DialogWindow(
-                context: context,
+        return _DialogWindow(context,
                 title: title,
                 button01: button01,
                 button02: button02,
@@ -88,13 +88,9 @@ void dialogBox({
 }
 
 class _DialogWindow {
-  _DialogWindow(
-      {@required this.context,
-      this.title,
-      this.button01,
-      this.button02,
-      this.press01,
-      this.press02});
+  _DialogWindow(this.context,
+      {this.title, this.button01, this.button02, this.press01, this.press02})
+      : assert(context != null, 'DialogWindow(): context is required.');
 
   final BuildContext context;
   final String title;

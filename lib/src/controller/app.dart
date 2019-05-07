@@ -22,7 +22,8 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart' show Key, mustCallSuper, required;
+import 'package:flutter/foundation.dart'
+    show Key, mustCallSuper, protected, required;
 
 import 'package:flutter/material.dart'
     show
@@ -63,6 +64,8 @@ import 'package:flutter/material.dart'
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
+
+import 'package:mxc_application/mvc.dart' show AppError;
 
 import 'package:mxc_application/app.dart' show AppMVC, AppConMVC;
 
@@ -112,60 +115,54 @@ import 'package:mxc_application/src/view/utils/loading_screen.dart'
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
 
-typedef CreateView = AppView Function();
-
-class App extends AppMVC {
+abstract class App extends AppMVC {
   // You must supply a 'View.'
-  factory App(CreateView createVW,
-      {ControllerMVC con, Key key, Widget loadingScreen}) {
-    // Supply a 'Controller' if need be.
-    _this ??= App._(createVW, con, key, loadingScreen);
-    return _this;
-  }
-  // Make only one instance of this class.
-  static App _this;
+  App({ControllerMVC con, Key key, this.loadingScreen})
+      : super(con: con, key: key);
 
-  App._(CreateView createVW, ControllerMVC con, Key key, this.loadingScreen)
-      : super(con: con, key: key) {
-    _vw = createVW();
-    App.createVW = () {
-      if (hotLoad) _vw = createVW();
-      return _vw;
-    };
-  }
+  @protected
+  AppView createView();
+
   static AppView _vw;
   static AsyncSnapshot get snapshot => _snapshot;
   static AsyncSnapshot _snapshot;
   final Widget loadingScreen;
-  static CreateView createVW;
   static bool hotLoad = false;
+
+  @override
+  void initApp() {
+    _vw = createView();
+    super.initApp();
+    _vw.con.initApp();
+  }
 
   @override
   Widget build(BuildContext context) {
     Assets.init(context);
-    App._context = context;
+    _context = context;
     return FutureBuilder<bool>(
       future: init(),
       initialData: false,
       builder: (_, snapshot) {
-        //TODO if false, display the appropriate message.
-        if(snapshot.hasError) return Text("${snapshot.error}");
+        _snapshot = snapshot;
+        if (snapshot.hasError){
+          _vw = AppError(snapshot.error);
+          return _AppWidget(snapshot);
+        }
         return snapshot.connectionState == ConnectionState.done
-            ? (snapshot.hasData && snapshot.data ? _AppWidget(snapshot) : LoadingScreen())
+            ? (snapshot.hasData && snapshot.data
+                ? _AppWidget(snapshot)
+                : LoadingScreen())
             : loadingScreen ?? LoadingScreen();
       },
     );
   }
 
   @override
-  void initApp() {
-    super.initApp();
-    _vw.con.initApp();
-  }
-
-  @override
   Future<bool> init() async {
-    if (!hotLoad) {
+    if (hotLoad) {
+      _vw = createView();
+    }else{
       await _initInternal();
       _packageInfo = await PackageInfo.fromPlatform();
     }
@@ -379,11 +376,8 @@ class App extends AppMVC {
 }
 
 class _AppWidget extends StatefulWidget {
-  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key) {
-    /// Supply the AsyncSnapshot
-    App._snapshot = snapshot;
-  }
-  State createState() => App.createVW();
+  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key);
+  State createState() => App._vw;
 }
 
 class AppView extends AppViewState<_AppWidget> {
@@ -495,7 +489,7 @@ class AppView extends AppViewState<_AppWidget> {
   RouteFactory onOnUnknownRoute() => null;
   List<NavigatorObserver> onNavigatorObservers() => const <NavigatorObserver>[];
   TransitionBuilder onBuilder() => null;
-  String onTitle() => null;
+  String onTitle() => '';
   GenerateAppTitle onOnGenerateTitle() => null;
   Color onColor() => null;
   ThemeData onTheme() => App.getThemeData();

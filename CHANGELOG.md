@@ -1,6 +1,11 @@
+## 3.0.0
+ 2019-05-06
+- Allow for Hot Reload! Version 2.0.0 proved not efficient or effective!
+- abstract class App with abstract function, AppView createView(); 
+
 ## 2.0.3
  2019-05-03
-- snapshot.hasData ? _AppWidget(snapshot) : LoadingScreen()
+- snapshot.hasData && snapshot.data ? _AppWidget(snapshot) : LoadingScreen()
 - Hot reload must have db close & set to null first.
 
 ## 2.0.2
