@@ -1,3 +1,8 @@
+## 3.1.0
+ 2019-05-11
+- Remove AppViewState.dispose() from AppViewState.reassemble
+- Add _vw.con.initApp(); to App.init(); 
+
 ## 3.0.0
  2019-05-06
 - Allow for Hot Reload! Version 2.0.0 proved not efficient or effective!

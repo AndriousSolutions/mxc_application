@@ -162,6 +162,7 @@ abstract class App extends AppMVC {
   Future<bool> init() async {
     if (hotLoad) {
       _vw = createView();
+      _vw.con.initApp();
     }else{
       await _initInternal();
       _packageInfo = await PackageInfo.fromPlatform();
@@ -583,23 +584,6 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   Future<bool> init() async {
     bool init = await con.init();
     return init;
-  }
-
-  /// Override to dispose anything initialized in your init() function.
-  @mustCallSuper
-  void dispose() {
-    con.dispose();
-    super.dispose();
-  }
-
-  /// During development, if a hot reload occurs, the reassemble method is called.
-  /// This provides an opportunity to reinitialize any data that was prepared
-  /// in the initState method.
-  @mustCallSuper
-  @override
-  void reassemble() {
-    super.reassemble();
-    dispose();
   }
 }
 
