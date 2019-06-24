@@ -3,8 +3,13 @@
 
 import 'package:flutter/material.dart' show runApp;
 
-import 'package:mxc_application/mvc.dart' show MVC;
+import 'package:mxc_application/mvc.dart' show App;
 
 import 'view.dart' show ContactsExampleApp;
 
-void main() => runApp(MVC(()=>ContactsExampleApp()));
+void main() => runApp(MyApp());
+
+class MyApp extends App{
+  @override
+  createView() => ContactsExampleApp();
+}

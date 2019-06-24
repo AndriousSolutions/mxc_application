@@ -1,3 +1,8 @@
+## 3.2.0
+ 2019-06-23
+- keyField(String table) in DBInterface
+- darkTheme introduced to AppView 
+
 ## 3.1.0
  2019-05-11
 - Remove AppViewState.dispose() from AppViewState.reassemble

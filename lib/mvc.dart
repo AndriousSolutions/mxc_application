@@ -52,7 +52,7 @@ import 'package:flutter/material.dart'
 
 import 'app.dart' show App;
 
-import 'view.dart' show AppController, AppView, showBox;
+import 'view.dart' show AppController, AppView;
 
 import 'controller.dart' show ControllerMVC;
 
@@ -60,7 +60,7 @@ typedef CreateView = AppView Function();
 CreateView _createVW;
 
 /// Passed to runApp() but calls App()
-/// Not longer effective alternative.
+/// No longer effective alternative.
 @deprecated
 class MVC extends StatelessWidget {
   MVC(
@@ -114,7 +114,6 @@ class _AppError extends StatefulWidget {
 }
 
 class _AppErrorState extends State<_AppError> {
-
   Widget build(BuildContext context) => Scaffold(
         body: Center(
           child: Text("${widget.exception.toString()}"),

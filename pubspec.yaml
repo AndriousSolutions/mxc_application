@@ -13,29 +13,34 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
-  mvc_pattern: ^3.3.6
+  mvc_pattern: ^3.0.0
 #      path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
-  connectivity: ^0.3.0
+  # Avoiding AndroidX
+  connectivity: 0.3.2
 
   # https://pub.dartlang.org/packages/sqflite#-changelog-tab-
   sqflite: 1.0.0
 
   # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
-  url_launcher: ^4.1.0
+  # Avoiding AndroidX
+  url_launcher: 4.1.0+1
 
   # https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: ^0.3.2
+  # Avoiding AndroidX
+  package_info: 0.3.2+1
 
   # https://pub.dartlang.org/packages/device_info#-changelog-tab-
-  device_info: ^0.3.0
+  # Avoiding AndroidX
+  device_info: 0.3.0
 
   # https://pub.dartlang.org/packages/flutter_material_color_picker#-changelog-tab-
   flutter_material_color_picker: ^0.0.5
 
   # https://pub.dartlang.org/packages/path_provider#-changelog-tab-
-  path_provider: ^0.4.0
+  # Avoiding AndroidX
+  path_provider: 0.4.1
 
   # https://pub.dartlang.org/packages/uuid#-changelog-tab-
   uuid: ^2.0.0

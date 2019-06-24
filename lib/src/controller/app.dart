@@ -129,6 +129,9 @@ abstract class App extends AppMVC {
   final Widget loadingScreen;
   static bool hotLoad = false;
 
+  /// More efficient widget tree rebuilds
+  static final materialKey = GlobalKey();
+
   @override
   void initApp() {
     _vw = createView();
@@ -145,7 +148,7 @@ abstract class App extends AppMVC {
       initialData: false,
       builder: (_, snapshot) {
         _snapshot = snapshot;
-        if (snapshot.hasError){
+        if (snapshot.hasError) {
           _vw = AppError(snapshot.error);
           return _AppWidget(snapshot);
         }
@@ -163,7 +166,7 @@ abstract class App extends AppMVC {
     if (hotLoad) {
       _vw = createView();
       _vw.con.initApp();
-    }else{
+    } else {
       await _initInternal();
       _packageInfo = await PackageInfo.fromPlatform();
     }
@@ -396,6 +399,7 @@ class AppView extends AppViewState<_AppWidget> {
       String title,
       GenerateAppTitle onGenerateTitle,
       ThemeData theme,
+      ThemeData darkTheme,
       Color color,
       Locale locale,
       Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
@@ -407,6 +411,7 @@ class AppView extends AppViewState<_AppWidget> {
       bool checkerboardOffscreenLayers,
       bool showSemanticsDebugger,
       bool debugShowCheckedModeBanner,
+      bool debugShowWidgetInspector,
       bool debugPaintSizeEnabled,
       bool debugPaintBaselinesEnabled,
       bool debugPaintPointersEnabled,
@@ -424,6 +429,7 @@ class AppView extends AppViewState<_AppWidget> {
           title: title,
           onGenerateTitle: onGenerateTitle,
           theme: theme,
+          darkTheme: darkTheme,
           color: color,
           locale: locale,
           localizationsDelegates: localizationsDelegates,
@@ -434,6 +440,7 @@ class AppView extends AppViewState<_AppWidget> {
           checkerboardRasterCacheImages: checkerboardRasterCacheImages,
           checkerboardOffscreenLayers: checkerboardOffscreenLayers,
           showSemanticsDebugger: showSemanticsDebugger,
+          debugShowWidgetInspector: debugShowWidgetInspector,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
         );
   final Key key;
@@ -442,7 +449,7 @@ class AppView extends AppViewState<_AppWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: key,
+      key: key ?? App.materialKey,
       navigatorKey: navigatorKey ?? onNavigatorKey(),
       home: home,
       routes: routes ?? onRoutes(),
@@ -455,6 +462,7 @@ class AppView extends AppViewState<_AppWidget> {
       onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
       color: color ?? onColor(),
       theme: theme ?? onTheme(),
+      darkTheme: darkTheme ?? onDarkTheme(),
       locale: locale ?? onLocale(),
       localizationsDelegates:
           localizationsDelegates ?? onLocalizationsDelegates(),
@@ -474,6 +482,12 @@ class AppView extends AppViewState<_AppWidget> {
     );
   }
 
+  @override
+  void dispose() {
+    _navigatorKey = null;
+    super.dispose();
+  }
+
   /// During development, if a hot reload occurs, the reassemble method is called.
   @mustCallSuper
   @override
@@ -482,8 +496,13 @@ class AppView extends AppViewState<_AppWidget> {
     super.reassemble();
   }
 
-  GlobalKey<NavigatorState> onNavigatorKey() =>
-      null; //GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> _navigatorKey;
+
+  GlobalKey<NavigatorState> onNavigatorKey() {
+    _navigatorKey ??= GlobalKey<NavigatorState>();
+    return _navigatorKey;
+  }
+
   Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
   String onInitialRoute() => null;
   RouteFactory onOnGenerateRoute() => null;
@@ -494,6 +513,7 @@ class AppView extends AppViewState<_AppWidget> {
   GenerateAppTitle onOnGenerateTitle() => null;
   Color onColor() => null;
   ThemeData onTheme() => App.getThemeData();
+  ThemeData onDarkTheme() => null;
   Locale onLocale() => null;
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
   LocaleResolutionCallback onLocaleResolutionCallback() => null;
@@ -520,6 +540,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
     this.onGenerateTitle,
     this.color,
     this.theme,
+    this.darkTheme,
     this.locale,
     this.localizationsDelegates,
     this.localeResolutionCallback,
@@ -529,6 +550,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
     this.checkerboardRasterCacheImages: false,
     this.checkerboardOffscreenLayers: false,
     this.showSemanticsDebugger: false,
+    this.debugShowWidgetInspector: false,
     this.debugShowCheckedModeBanner: true,
     this.debugPaintSizeEnabled = false,
     this.debugPaintBaselinesEnabled = false,
@@ -558,6 +580,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   final String title;
   final GenerateAppTitle onGenerateTitle;
   final ThemeData theme;
+  final ThemeData darkTheme;
   final Color color;
   final Locale locale;
   final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
@@ -568,6 +591,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   final bool checkerboardRasterCacheImages;
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
+  final bool debugShowWidgetInspector;
   final bool debugShowCheckedModeBanner;
 
   /// Highlights UI while debugging.

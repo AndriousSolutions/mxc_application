@@ -10,6 +10,7 @@
 ## [1.6.0] - 2019-02-09: App Color Theme Picker
 ## [1.7.1] - 2019-02-10: Sort Contacts; Corrected deleting
 ## [1.8.0] - 2019-03-13: package:mxc_application; name in Pubspec.yaml changed to contacts_androidx_example
+## [1.8.1] - 2019-06-23: Removed MVC() replaced with App class
 
 
 

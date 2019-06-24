@@ -65,9 +65,9 @@ class AppMenu {
     return PopupMenuButton<String>(
       onSelected: _showMenuSelection,
       itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-            PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
-            const PopupMenuItem<String>(value: 'About', child: Text('About')),
-          ],
+        PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
+        const PopupMenuItem<String>(value: 'About', child: Text('About')),
+      ],
     );
   }
 

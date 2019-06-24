@@ -23,7 +23,6 @@
 
 import 'package:flutter/material.dart';
 
-
 Future<bool> showBox({
   @required BuildContext context,
   String text,
@@ -44,23 +43,23 @@ Future<bool> showBox({
   return showDialog<bool>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-            content: Text(text ?? ' ', style: dialogTextStyle),
-            actions: <Widget>[
-              FlatButton(
-                  child: Text(button02.text ?? 'Cancel'),
-                  onPressed: () {
-                    if (press02 != null) press02();
-                    if (button02.onPressed != null) button02.onPressed();
-                    Navigator.pop(context, button02.result);
-                  }),
-              FlatButton(
-                  child: Text(button01.text ?? 'OK'),
-                  onPressed: () {
-                    if (press01 != null) press01();
-                    if (button01.onPressed != null) button01.onPressed();
-                    Navigator.pop(context, button01.result);
-                  }),
-            ]),
+        content: Text(text ?? ' ', style: dialogTextStyle),
+        actions: <Widget>[
+          FlatButton(
+              child: Text(button02.text ?? 'Cancel'),
+              onPressed: () {
+                if (press02 != null) press02();
+                if (button02.onPressed != null) button02.onPressed();
+                Navigator.pop(context, button02.result);
+              }),
+          FlatButton(
+              child: Text(button01.text ?? 'OK'),
+              onPressed: () {
+                if (press01 != null) press01();
+                if (button01.onPressed != null) button01.onPressed();
+                Navigator.pop(context, button01.result);
+              }),
+        ]),
   );
 }
 
